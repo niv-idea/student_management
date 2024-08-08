@@ -3,9 +3,11 @@ package com.student.controller;
 import com.student.dto.ResponseWrapper;
 import com.student.dto.StudentRequest;
 import com.student.dto.StudentResponce;
+import com.student.dto.StudentStatResponseByAge;
 import com.student.entity.Student;
 import com.student.enums.Status;
 import com.student.service.StudentService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,5 +62,11 @@ public class StudentController {
         ResponseWrapper responseWrapper=new ResponseWrapper(Status.SUCCESS,studentId);
         return new ResponseEntity<>(responseWrapper,HttpStatus.OK);
         //return new ResponseEntity<>(new ResponseWrapper(Status.SUCCESS, service.deleteStudentById(id)),HttpStatus.OK);
+    }
+
+    @GetMapping("/statistic/age")
+    public ResponseEntity<ResponseWrapper> getStatByAge() {
+        List<StudentStatResponseByAge> allStudentsByAge = service.getAllStudentsByAge();
+        return ResponseEntity.ok().body(new ResponseWrapper(Status.SUCCESS, allStudentsByAge));
     }
 }

@@ -1,7 +1,9 @@
 package com.student.service;
 
+import com.student.dto.StudentDetails;
 import com.student.dto.StudentRequest;
 import com.student.dto.StudentResponce;
+import com.student.dto.StudentStatResponseByAge;
 import com.student.entity.Student;
 import com.student.exception.StudentException;
 import com.student.repo.StudentRepository;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,6 +107,28 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
             responses.add(studentResponce);
         }
         return responses;
+    }
+
+    @Override
+    public List<StudentStatResponseByAge> getAllStudentsByAge() {
+        List<StudentStatResponseByAge> response = new ArrayList<>();
+        Map<Integer, List<Student>> ageVsStudentMap = studentRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(Student::getAge,
+                        Collectors.mapping(student -> student, Collectors.toList())));
+        ageVsStudentMap.forEach((k,v )-> {
+            response.add(new StudentStatResponseByAge(k, v.stream().map(this::getStudentDetailsFromEntity).collect(Collectors.toList())) );
+        });
+        return response;
+    }
+
+    private StudentDetails getStudentDetailsFromEntity(Student student) {
+        StudentDetails details = new StudentDetails();
+        details.setId(student.getId());
+        details.setName(student.getName());
+        details.setCity(student.getCity());
+        details.setMarks(student.getMarks());
+        return details;
     }
 
     //firstly you have to provide all the details related to that particular student to response class then that class can fulfill request for client

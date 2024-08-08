@@ -3,6 +3,7 @@ package com.student.service;
 
 import com.student.dto.StudentRequest;
 import com.student.dto.StudentResponce;
+import com.student.dto.StudentStatResponseByAge;
 import com.student.entity.Student;
 
 import java.util.List;
@@ -20,5 +21,8 @@ StudentResponce getStudent(int id);
 List<StudentResponce > getAllStudents();
 
 List<StudentResponce> getStudentsByAge(Integer age);
+
+// write api that will get stat of studnet by age;
+List<StudentStatResponseByAge> getAllStudentsByAge();
 
 }
