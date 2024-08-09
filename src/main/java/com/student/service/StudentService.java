@@ -29,4 +29,23 @@ public interface StudentService {
     List<StudentResponce> findStudentsByMarks(String marks);
 
     List<Map<String, Object>> countOfStudentByAgeWise();
+
+    // @Nivruttee ->write API that will count avg of all age
+
+    //@Chandradip -> write below API
+
+//    {
+//        "data": [
+//        {
+//            "studentClass": 3,
+//                "studentCount": 10,
+//                "avgAge": 8.5
+//        },
+//        {
+//            "studentClass": 2,
+//                "studentCount": 10,
+//                "avgAge": 8.5
+//        }
+//    ]
+//    }
 }
