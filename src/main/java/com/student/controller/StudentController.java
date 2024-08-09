@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/student/v1")
@@ -68,5 +69,16 @@ public class StudentController {
     public ResponseEntity<ResponseWrapper> getStatByAge() {
         List<StudentStatResponseByAge> allStudentsByAge = service.getAllStudentsByAge();
         return ResponseEntity.ok().body(new ResponseWrapper(Status.SUCCESS, allStudentsByAge));
+    }
+
+    @GetMapping(value = "/get/marks/{marks}")
+    public ResponseEntity<ResponseWrapper> getStudentsByMarks(@PathVariable String marks) {
+        List<StudentResponce> responces = service.findStudentsByMarks(marks);
+        return ResponseEntity.ok(new ResponseWrapper(Status.SUCCESS, responces));
+    }
+    @GetMapping(value = "/stat/age")
+    public ResponseEntity<ResponseWrapper> getStudentsCountByAge() {
+        List<Map<String, Object>> stringObjectMap = service.countOfStudentByAgeWise();
+        return ResponseEntity.ok().body(new ResponseWrapper(Status.SUCCESS, stringObjectMap));
     }
 }

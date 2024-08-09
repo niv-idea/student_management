@@ -18,4 +18,5 @@ public class Student {
     private Integer age;
     private String marks;
     private String city;
+    private Integer studentClass;
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -118,6 +119,30 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
                         Collectors.mapping(student -> student, Collectors.toList())));
         ageVsStudentMap.forEach((k,v )-> {
             response.add(new StudentStatResponseByAge(k, v.stream().map(this::getStudentDetailsFromEntity).collect(Collectors.toList())) );
+        });
+        return response;
+    }
+
+    @Override
+    public List<StudentResponce> findStudentsByMarks(String marks) {
+        return studentRepository.findByMarks(marks)
+                .stream()
+                .map(this::getStudentResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Map<String, Object>> countOfStudentByAgeWise() {
+        Map<Integer, Integer> ageVsCountMap = studentRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(Student::getAge, Collectors.collectingAndThen(Collectors.toList(), List::size)));
+
+        List<Map<String, Object>> response = new ArrayList<>();
+        ageVsCountMap.forEach((age, count) -> {
+            Map<String, Object> responseMap =  new HashMap<>();
+            responseMap.put("age", age);
+            responseMap.put("count", count);
+            response.add(responseMap);
         });
         return response;
     }

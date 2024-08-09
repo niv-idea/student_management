@@ -7,22 +7,26 @@ import com.student.dto.StudentStatResponseByAge;
 import com.student.entity.Student;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StudentService {
 //now create here CRUD method for implementation
-Integer addStudent(StudentRequest request);
+    Integer addStudent(StudentRequest request);
 
-Integer updateStudent(StudentRequest request, int id);
+    Integer updateStudent(StudentRequest request, int id);
 
-Integer deleteStudentById(int id);
+    Integer deleteStudentById(int id);
 
-StudentResponce getStudent(int id);
+    StudentResponce getStudent(int id);
 
-List<StudentResponce > getAllStudents();
+    List<StudentResponce > getAllStudents();
 
-List<StudentResponce> getStudentsByAge(Integer age);
+    List<StudentResponce> getStudentsByAge(Integer age);
 
-// write api that will get stat of studnet by age;
-List<StudentStatResponseByAge> getAllStudentsByAge();
+    // write api that will get stat of studnet by age;
+    List<StudentStatResponseByAge> getAllStudentsByAge();
 
+    List<StudentResponce> findStudentsByMarks(String marks);
+
+    List<Map<String, Object>> countOfStudentByAgeWise();
 }
