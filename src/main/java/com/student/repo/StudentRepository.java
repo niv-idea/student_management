@@ -16,4 +16,7 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     List<Student> findByMarks(@Param("marks") String marks);
 
     long countByAge(Integer age);
+
+    @Query(value = "SELECT * FROM student where city = :city" , nativeQuery = true)
+    List<Student> findByCity(@Param("city")String city);
 }

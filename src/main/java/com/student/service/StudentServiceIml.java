@@ -64,6 +64,9 @@ public class StudentServiceIml implements StudentService{
         if(request.getCity()!=null){
             student.setCity(request.getCity());
         }
+        if(request.getStudentClass()!=null){
+            student.setStudentClass(request.getStudentClass());
+        }
         //now lastly  we have to save this changes
         studentRepository.save(student);
         return student.getId();
@@ -133,7 +136,8 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
     public List<Map<String, Object>> countOfStudentByAgeWise() {
         Map<Integer, Integer> ageVsCountMap = studentRepository.findAll()
                 .stream()
-                .collect(Collectors.groupingBy(Student::getAge, Collectors.collectingAndThen(Collectors.toList(), List::size)));
+                .collect(Collectors.groupingBy(Student::getAge,
+                        Collectors.collectingAndThen(Collectors.toList(), List::size)));
 
         List<Map<String, Object>> response = new ArrayList<>();
         ageVsCountMap.forEach((age, count) -> {
@@ -143,6 +147,32 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
             response.add(responseMap);
         });
         return response;
+    }
+
+    @Override
+    public Double getAverageAge() {
+        List<Student> students = studentRepository.findAll();
+            double totalAge = students.stream().mapToInt(Student::getAge).sum();
+            return totalAge / students.size();
+
+    }
+
+    @Override
+    public List<StudentResponce> findStudentsByCity(String city) {
+        return studentRepository.findByCity(city)
+                .stream()
+                .map(this::getStudentResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupOfStudentsClassVise> studentsByClassViseAvg() {
+         List<GroupOfStudentsClassVise> listOfStudent=new ArrayList<>();
+         List<Student> students= studentRepository.findAll();
+         Map<Integer,List<Student>> classVsStudentMap= new HashMap<>();
+         for(Student student:students){
+
+         }
     }
 
     @Override
@@ -170,6 +200,7 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
         studentResponce.setAge(student.getAge());
         studentResponce.setMarks(student.getMarks());
         studentResponce.setCity(student.getCity());
+        studentResponce.setStudentClass(student.getStudentClass());
         return studentResponce;
      }
 }

@@ -1,10 +1,9 @@
 package com.student.service;
 
 
-import com.student.dto.StudentRequest;
-import com.student.dto.StudentResponce;
-import com.student.dto.StudentStatResponseByAge;
+import com.student.dto.*;
 import com.student.entity.Student;
+import org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader;
 
 import java.util.List;
 import java.util.Map;
@@ -23,10 +22,34 @@ public interface StudentService {
 
     List<StudentResponce> getStudentsByAge(Integer age);
 
-    // write api that will get stat of studnet by age;
+    // write api that will get stat of student by age;
     List<StudentStatResponseByAge> getAllStudentsByAge();
 
     List<StudentResponce> findStudentsByMarks(String marks);
 
     List<Map<String, Object>> countOfStudentByAgeWise();
+
+    // @Nivruttee ->write API that will count avg of all age
+     Double getAverageAge();
+
+     List<StudentResponce> findStudentsByCity(String city);
+
+     List<GroupOfStudentsClassVise> studentsByClassViseAvg();
+    //@Chandradip -> write below API
+
+    //    {
+//        "data": [
+//        {
+//            "studentClass": 3,
+//                "studentCount": 10,
+//                "avgAge": 8.5
+//        },
+//        {
+//            "studentClass": 2,
+//                "studentCount": 10,
+//                "avgAge": 8.5
+//        }
+//    ]
+//    }
+    StudentCountByAge countStudentsByAge(Integer age);
 }

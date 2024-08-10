@@ -82,4 +82,14 @@ public class StudentController {
     public StudentCountByAge countStudentsByAge(@RequestParam(value = "age") Integer age) {
         return service.countStudentsByAge(age);
     }
+    @GetMapping(value = "/average-age")
+    public ResponseEntity<ResponseWrapper> getAllStudentsAgeAverage(){
+        Double avg=service.getAverageAge();
+       return ResponseEntity.ok().body(new ResponseWrapper(Status.SUCCESS,avg));
+    }
+    @GetMapping(value = "/get/{city}")
+    public ResponseEntity<ResponseWrapper> getStudentsByCity(@PathVariable String city) {
+        List<StudentResponce> responses = service.findStudentsByCity(city);
+        return ResponseEntity.ok(new ResponseWrapper(Status.SUCCESS, responses));
+    }
 }
