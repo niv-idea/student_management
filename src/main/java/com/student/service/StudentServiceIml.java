@@ -1,9 +1,6 @@
 package com.student.service;
 
-import com.student.dto.StudentDetails;
-import com.student.dto.StudentRequest;
-import com.student.dto.StudentResponce;
-import com.student.dto.StudentStatResponseByAge;
+import com.student.dto.*;
 import com.student.entity.Student;
 import com.student.exception.StudentException;
 import com.student.repo.StudentRepository;
@@ -120,6 +117,7 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
         ageVsStudentMap.forEach((k,v )-> {
             response.add(new StudentStatResponseByAge(k, v.stream().map(this::getStudentDetailsFromEntity).collect(Collectors.toList())) );
         });
+        //we have to convert in java  7
         return response;
     }
 
@@ -145,6 +143,14 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
             response.add(responseMap);
         });
         return response;
+    }
+
+    @Override
+    public StudentCountByAge countStudentsByAge(Integer age) {
+        //int count = studentRepository.findByAge(age).size();
+        //return new StudentCountByAge(age, (long) count);
+        long count=   studentRepository.countByAge(age);
+         return new StudentCountByAge(age,count);
     }
 
     private StudentDetails getStudentDetailsFromEntity(Student student) {

@@ -9,6 +9,6 @@ public class ResponseWrapper {
     private Object data;
     public ResponseWrapper(Status status, Object data) {
         this.status = status;
-        this.data = data;
+        this.data = data; //this is super class object which we can take any type of datatype
     }
 }

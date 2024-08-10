@@ -1,6 +1,7 @@
 package com.student.service;
 
 
+import com.student.dto.StudentCountByAge;
 import com.student.dto.StudentRequest;
 import com.student.dto.StudentResponce;
 import com.student.dto.StudentStatResponseByAge;
@@ -29,4 +30,6 @@ public interface StudentService {
     List<StudentResponce> findStudentsByMarks(String marks);
 
     List<Map<String, Object>> countOfStudentByAgeWise();
+
+    StudentCountByAge countStudentsByAge(Integer age);
 }

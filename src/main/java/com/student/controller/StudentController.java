@@ -1,9 +1,6 @@
 package com.student.controller;
 
-import com.student.dto.ResponseWrapper;
-import com.student.dto.StudentRequest;
-import com.student.dto.StudentResponce;
-import com.student.dto.StudentStatResponseByAge;
+import com.student.dto.*;
 import com.student.entity.Student;
 import com.student.enums.Status;
 import com.student.service.StudentService;
@@ -80,5 +77,9 @@ public class StudentController {
     public ResponseEntity<ResponseWrapper> getStudentsCountByAge() {
         List<Map<String, Object>> stringObjectMap = service.countOfStudentByAgeWise();
         return ResponseEntity.ok().body(new ResponseWrapper(Status.SUCCESS, stringObjectMap));
+    }
+    @GetMapping(value="/count-by-age/{age}")
+    public StudentCountByAge countStudentsByAge(@RequestParam(value = "age") Integer age) {
+        return service.countStudentsByAge(age);
     }
 }
