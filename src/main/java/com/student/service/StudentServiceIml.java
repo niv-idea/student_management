@@ -1,18 +1,30 @@
 package com.student.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.student.dto.*;
 import com.student.entity.Student;
 import com.student.exception.StudentException;
 import com.student.repo.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceIml implements StudentService{
+
+    @Value("${api.find.gender.api.url}")
+    private String genderServiceUrl;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Autowired
      private StudentRepository studentRepository;
 
@@ -238,6 +250,24 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
         studentResponce.setMarks(student.getMarks());
         studentResponce.setCity(student.getCity());
         studentResponce.setStudentClass(student.getStudentClass());
+        studentResponce.setGender(student.getGender());
         return studentResponce;
      }
+
+    @Override
+    public String updateGenderOfStudent(Integer studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentException("Invalid Student Id"));
+
+        System.out.println("genderServiceUrl : "+genderServiceUrl);
+        String url = genderServiceUrl+"?name="+student.getName();
+        System.out.println("final third party api URL : "+url);
+        ResponseEntity<JsonNode> jsonResponse = restTemplate.getForEntity(URI.create(url), JsonNode.class);
+        if (jsonResponse.getBody()!=null && jsonResponse.getBody().get("gender")!=null) {
+            String gender = jsonResponse.getBody().get("gender").asText();
+            student.setGender(gender);
+            studentRepository.save(student);
+        }
+        return student.getGender();
+    }
 }

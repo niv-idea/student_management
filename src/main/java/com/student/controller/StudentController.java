@@ -98,4 +98,10 @@ public class StudentController {
         return ResponseEntity.ok()
                 .body(new ResponseWrapper(Status.SUCCESS, service.studentsByClassViseAvg()));
     }
+
+    @GetMapping("/update/gender/{studentId}")
+    public ResponseEntity<ResponseWrapper> updateGenderOfStudent(@PathVariable Integer studentId) {
+        return ResponseEntity.ok()
+                .body(new ResponseWrapper(Status.SUCCESS, service.updateGenderOfStudent(studentId)));
+    }
 }

@@ -10,4 +10,5 @@ public class StudentResponce {
     private String marks;
     private String city;
     private Integer studentClass;
+    private String gender;
 }

@@ -35,6 +35,8 @@ public interface StudentService {
      List<StudentResponce> findStudentsByCity(String city);
 
      List<GroupOfStudentsClassVise> studentsByClassViseAvg();
+
+     String updateGenderOfStudent(Integer studentId);
     //@Chandradip -> write below API
 
     //    {
