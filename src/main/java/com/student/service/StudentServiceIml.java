@@ -172,6 +172,7 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
          Map<Integer,List<Student>> classVsStudentMap= new HashMap<>();
          for(Student student:students){
 //            classVsStudentMap.getOrDefault(student.getStudentClass(), new ArrayList<>());
+             //above line and below if -else block are same
              if (classVsStudentMap.containsKey(student.getStudentClass())) {
                  List<Student> st = classVsStudentMap.get(student.getStudentClass());
              } else {
