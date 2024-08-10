@@ -173,10 +173,14 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
          for(Student student:students){
 //            classVsStudentMap.getOrDefault(student.getStudentClass(), new ArrayList<>());
              //above line and below if -else block are same
-             if (classVsStudentMap.containsKey(student.getStudentClass())) {
+             if (classVsStudentMap.containsKey(student.getStudentClass())) { //1 //2
                  List<Student> st = classVsStudentMap.get(student.getStudentClass());
+                 st.add(student);
+                 classVsStudentMap.put(student.getStudentClass(), st);
              } else {
                  List<Student> st = new ArrayList<>();
+                 st.add(student);
+                 classVsStudentMap.put(student.getStudentClass(), st);
              }
          }
          return  listOfStudent;
