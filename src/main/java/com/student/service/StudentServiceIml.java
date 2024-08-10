@@ -173,6 +173,7 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
          for(Student student:students){
 
          }
+         return  listOfStudent;
     }
 
     @Override
