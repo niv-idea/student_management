@@ -7,10 +7,8 @@ import com.student.repo.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -168,36 +166,50 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
     @Override
     public List<GroupOfStudentsClassVise> studentsByClassViseAvg() {
          List<GroupOfStudentsClassVise> listOfStudent=new ArrayList<>();
-         List<Student> students= studentRepository.findAll();
-         Map<Integer,List<Student>> classVsStudentMap= new HashMap<>();
-         for(Student student:students){
-//            classVsStudentMap.getOrDefault(student.getStudentClass(), new ArrayList<>());
-             //above line and below if -else block are same
-             if (classVsStudentMap.containsKey(student.getStudentClass())) { //1 //2
-                 List<Student> st = classVsStudentMap.get(student.getStudentClass());
-                 st.add(student);
-                 classVsStudentMap.put(student.getStudentClass(), st);
-             } else {
-                 List<Student> st = new ArrayList<>();
-                 st.add(student);
-                 classVsStudentMap.put(student.getStudentClass(), st);
-             }
-         }
+//         List<Student> students = studentRepository.findAll();
+//         Map<Integer,List<Student>> classVsStudentMap= new HashMap<>();
+//         for(Student student : students){
+////            classVsStudentMap.getOrDefault(student.getStudentClass(), new ArrayList<>());
+//             //above line and below if -else block are same
+//             if (classVsStudentMap.containsKey(student.getStudentClass())) { //1 //2
+//                 List<Student> st = classVsStudentMap.get(student.getStudentClass());
+//                 st.add(student);
+//                 classVsStudentMap.put(student.getStudentClass(), st);
+//             } else {
+//                 List<Student> st = new ArrayList<>();
+//                 st.add(student);
+//                 classVsStudentMap.put(student.getStudentClass(), st);
+//             }
+//         }
+//
+//         for (Map.Entry<Integer, List<Student>> entry : classVsStudentMap.entrySet()) {
+//             GroupOfStudentsClassVise studentsClassVise = new GroupOfStudentsClassVise();
+//             studentsClassVise.setStudentClass(entry.getKey());
+//             studentsClassVise.setStudentCount(entry.getValue().size());
+//             int totalAge = 0;
+//             for (Student student : entry.getValue()) {
+//                 totalAge +=student.getAge();
+//             }
+//             Double avgAge = (double) totalAge /entry.getValue().size();
+//             studentsClassVise.setAvgAge(avgAge);
+//             listOfStudent.add(studentsClassVise);
+//         }
+//        return  listOfStudent;
 
-         for (Map.Entry<Integer, List<Student>> entry : classVsStudentMap.entrySet()) {
-             GroupOfStudentsClassVise studentsClassVise = new GroupOfStudentsClassVise();
-             studentsClassVise.setStudentClass(entry.getKey());
-             studentsClassVise.setStudentCount(entry.getValue().size());
-             int totalAge = 0;
-             for (Student student : entry.getValue()) {
-                 totalAge +=student.getAge();
-             }
-             Double avgAge = (double) totalAge /entry.getValue().size();
-             studentsClassVise.setAvgAge(avgAge);
-             listOfStudent.add(studentsClassVise);
-         }
+        // java 8 => solution
+        Map<Integer, GroupOfStudentsClassVise> collect = studentRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(Student::getStudentClass, Collectors.collectingAndThen(Collectors.toList(), students -> {
+                    GroupOfStudentsClassVise studentsClassVise = new GroupOfStudentsClassVise();
+                    Optional<Integer> sum = students.stream().map(Student::getAge).reduce(Integer::sum);
+                    sum.ifPresent(integer -> studentsClassVise.setAvgAge((double) (integer / students.size())));
+                    studentsClassVise.setStudentClass(students.get(0).getStudentClass());
+                    studentsClassVise.setStudentCount(students.size());
+                    return studentsClassVise;
+                })));
 
-         return  listOfStudent;
+        return new ArrayList<>(collect.values());
+
     }
 
     @Override
