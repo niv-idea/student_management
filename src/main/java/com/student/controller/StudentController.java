@@ -92,4 +92,10 @@ public class StudentController {
         List<StudentResponce> responses = service.findStudentsByCity(city);
         return ResponseEntity.ok(new ResponseWrapper(Status.SUCCESS, responses));
     }
+
+    @GetMapping("/classWise/avgMarks")
+    public ResponseEntity<ResponseWrapper> clasWiseAvgMarks() {
+        return ResponseEntity.ok()
+                .body(new ResponseWrapper(Status.SUCCESS, service.studentsByClassViseAvg()));
+    }
 }

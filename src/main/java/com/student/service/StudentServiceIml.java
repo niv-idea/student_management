@@ -183,6 +183,20 @@ Student student=studentRepository.findById(id).orElseThrow(()->new StudentExcept
                  classVsStudentMap.put(student.getStudentClass(), st);
              }
          }
+
+         for (Map.Entry<Integer, List<Student>> entry : classVsStudentMap.entrySet()) {
+             GroupOfStudentsClassVise studentsClassVise = new GroupOfStudentsClassVise();
+             studentsClassVise.setStudentClass(entry.getKey());
+             studentsClassVise.setStudentCount(entry.getValue().size());
+             int totalAge = 0;
+             for (Student student : entry.getValue()) {
+                 totalAge +=student.getAge();
+             }
+             Double avgAge = (double) totalAge /entry.getValue().size();
+             studentsClassVise.setAvgAge(avgAge);
+             listOfStudent.add(studentsClassVise);
+         }
+
          return  listOfStudent;
     }
 
